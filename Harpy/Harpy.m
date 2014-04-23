@@ -16,9 +16,8 @@
 
 /// i18n/l10n macros
 #define HARPY_CURRENT_VERSION                       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-#define HARPY_BUNDLE_PATH                           [[NSBundle mainBundle] pathForResource:@"Harpy" ofType:@"bundle"]
-#define HARPY_LOCALIZED_STRING(stringKey)           [[NSBundle bundleWithPath:HARPY_BUNDLE_PATH] localizedStringForKey:stringKey value:stringKey table:@"HarpyLocalizable"]
-#define HARPY_FORCED_BUNDLE_PATH                    [[NSBundle bundleWithPath:HARPY_BUNDLE_PATH] pathForResource:[self forceLanguageLocalization] ofType:@"lproj"]
+#define HARPY_LOCALIZED_STRING(stringKey)           [[Harpy bundle] localizedStringForKey:stringKey value:stringKey table:@"HarpyLocalizable"]
+#define HARPY_FORCED_BUNDLE_PATH                    [[Harpy bundle] pathForResource:[self forceLanguageLocalization] ofType:@"lproj"]
 #define HARPY_FORCED_LOCALIZED_STRING(stringKey)    [[NSBundle bundleWithPath:HARPY_FORCED_BUNDLE_PATH] localizedStringForKey:stringKey value:stringKey table:@"HarpyLocalizable"]
 
 /// App Store links
@@ -53,6 +52,21 @@ NSString * const HarpyLanguageSpanish = @"es";
 @end
 
 @implementation Harpy
+
++ (NSBundle *)bundle
+{
+  NSBundle *bundle;
+
+  NSURL *harpyBundleUrl = [[NSBundle mainBundle] URLForResource:@"Harpy" withExtension:@"bundle"];
+
+  if (harpyBundleUrl) {
+    bundle = [NSBundle bundleWithURL:harpyBundleUrl];
+  } else {
+    bundle = [NSBundle mainBundle];
+  }
+
+  return bundle;
+}
 
 #pragma mark - Initialization
 + (id)sharedInstance
